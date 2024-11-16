@@ -44,12 +44,13 @@
     }
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
+    "next-env.d.ts",
     "next.config.ts",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "build/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
