@@ -1,0 +1,12 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript", "next/core-web-vitals"],
+  "rules": {
+    "@typescript-eslint/no-require-imports": ["error", {
+      "allow": ["tailwindcss-animate"]
+    }],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
+  }
+}
