@@ -1,14 +1,14 @@
 {
   "builds": [
     {
-      "src": "packages/frontend/next.config.js",
+      "src": "next.config.js",
       "use": "@vercel/next"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "packages/frontend/$1"
+      "dest": "$1"
     }
   ]
 }
