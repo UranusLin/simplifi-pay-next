@@ -12,7 +12,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Icons } from "@/components/icons"
-import {WalletAvatar} from "@components/wallet/wallet-avatar";
+import { WalletAvatar } from "@components/wallet/wallet-avatar"
+import { useEffect } from "react"
 
 export function UserNav() {
     const { logout, getUserInfo } = useWeb3Auth()
@@ -21,6 +22,17 @@ export function UserNav() {
     const shortenAddress = (addr: string) => {
         if (!addr) return ''
         return `${addr.slice(0, 6)}...${addr.slice(-4)}`
+    }
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text).then(
+            () => {
+                alert("Address copied to clipboard!")
+            },
+            (err) => {
+                console.error("Could not copy text: ", err)
+            }
+        )
     }
 
     return (
@@ -44,9 +56,16 @@ export function UserNav() {
                 <DropdownMenuLabel>
                     <div className="flex flex-col space-y-2">
                         <p className="text-sm font-medium leading-none">Wallet</p>
-                        <p className="text-xs font-mono truncate">
-                            {address ? shortenAddress(address) : 'Not connected'}
-                        </p>
+                        <div className="flex items-center space-x-2">
+                            <p className="text-xs font-mono truncate">
+                                {address ? shortenAddress(address) : 'Not connected'}
+                            </p>
+                            {address && (
+                                <button onClick={() => copyToClipboard(address)}>
+                                    <Icons.copy className="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
