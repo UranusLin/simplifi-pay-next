@@ -30,7 +30,7 @@ export function MainNav() {
         <nav className="flex items-center space-x-6">
             <Link href="/" className="flex items-center space-x-2">
                 <Icons.logo className="h-6 w-6" />
-                <span className="inline-block font-bold">SimpliFi Pay</span>
+                <span className="hidden font-bold sm:inline-block">SimpliFi Pay</span>
             </Link>
             <div className="flex gap-6">
                 {routes.map((route) => (

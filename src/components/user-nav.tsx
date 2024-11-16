@@ -12,8 +12,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Icons } from "@/components/icons"
-import { WalletAvatar } from "./wallet/wallet-avatar"
-import { NetworkSelector } from "./wallet/network-selector"
+import {WalletAvatar} from "@components/wallet/wallet-avatar";
 
 export function UserNav() {
     const { logout, getUserInfo } = useWeb3Auth()
@@ -27,12 +26,15 @@ export function UserNav() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 p-0 rounded-full">
-                    <div className="relative h-full w-full overflow-hidden rounded-full">
-                        <WalletAvatar size={36} />
+                <Button
+                    variant="ghost"
+                    className="relative h-10 w-10 rounded-full p-0"
+                >
+                    <div className="relative h-full w-full">
+                        <WalletAvatar size={40} />
                         {isLoading && (
                             <div className="absolute -top-1 -right-1">
-                                <Icons.spinner className="h-3 w-3 animate-spin" />
+                                <Icons.spinner className="h-4 w-4 animate-spin" />
                             </div>
                         )}
                     </div>
@@ -55,10 +57,6 @@ export function UserNav() {
                             <span>{balance ? `${Number(balance).toFixed(4)} ETH` : '0 ETH'}</span>
                         </div>
                     </div>
-                </div>
-                <DropdownMenuSeparator />
-                <div className="p-2">
-                    <NetworkSelector />
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
