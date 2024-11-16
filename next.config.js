@@ -1,8 +1,6 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-    reactStrictMode: true,
+/** @type {import('next').NextConfig} */
+const config = {
+    eactStrictMode: true,
     transpilePackages: ["@simplifi-pay/common", "@simplifi-pay/sdk"],
     webpack: (config) => {
         config.resolve.fallback = {
@@ -15,4 +13,4 @@ const nextConfig: NextConfig = {
     distDir: 'build',
 };
 
-export default nextConfig;
+module.exports = config;
