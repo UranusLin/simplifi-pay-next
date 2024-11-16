@@ -1,14 +1,19 @@
+'use client';
+
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+
+export type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed'
 
 export interface Payment {
     id: string
     amount: string
     description: string
-    status: 'pending' | 'processing' | 'completed' | 'failed'
+    recipient?: string
+    status: PaymentStatus
+    method: string
     createdAt: string
-    from?: string
-    to?: string
+    to?: string;
 }
 
 interface PaymentStore {

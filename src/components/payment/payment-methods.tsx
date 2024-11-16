@@ -1,58 +1,61 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { PaymentMethod } from "@/types/payment"
+import { useState } from 'react'
+import { Card, CardContent } from "@/components/ui/card"
+import type { PaymentMethod } from "@/types/payment"
 import { Icons } from "@/components/icons"
 import { cn } from "@/lib/utils"
-
-interface PaymentMethodsProps {
-    onSelect: (method: PaymentMethod) => void
-    selectedMethod?: PaymentMethod
-}
+import { useRouter } from "next/navigation"
 
 const methods = [
     {
         id: 'wallet',
-        name: 'Crypto Wallet',
+        name: 'World Wallet',
         icon: Icons.wallet,
-        description: 'Pay with your crypto wallet',
+        description: 'Pay with your World ID wallet',
     },
     {
-        id: 'card',
-        name: 'Credit Card',
-        icon: Icons.card,
-        description: 'Pay with credit/debit card',
-    },
-    {
-        id: 'bank',
-        name: 'Bank Transfer',
-        icon: Icons.bank,
-        description: 'Pay via bank transfer',
-    },
-]
+        id: 'direct',
+        name: 'Direct Transfer',
+        icon: Icons.send,
+        description: 'Send directly to recipient',
+    }
+] as const
 
-export function PaymentMethods({ onSelect, selectedMethod }: PaymentMethodsProps) {
+export function PaymentMethods() {
+    const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>()
+    const router = useRouter()
+
+    const handleSelect = (method: PaymentMethod) => {
+        setSelectedMethod(method)
+        if (method === 'wallet') {
+            // 使用 World Wallet
+            router.push('/payment/create?method=wallet')
+        } else if (method === 'bank') {
+            // 直接轉帳
+            router.push('/payment/create?method=direct')
+        }
+    }
+
     return (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4">
             {methods.map((method) => (
                 <Card
                     key={method.id}
                     className={cn(
-                        "cursor-pointer transition-colors hover:bg-accent",
+                        "cursor-pointer hover:bg-accent",
                         selectedMethod === method.id && "border-primary"
                     )}
-                    onClick={() => onSelect(method.id as PaymentMethod)}
+                    onClick={() => handleSelect(method.id as PaymentMethod)}
                 >
-                    <CardHeader>
-                        <div className="flex items-center space-x-2">
-                            <method.icon className="h-5 w-5" />
-                            <CardTitle className="text-base">{method.name}</CardTitle>
+                    <CardContent className="p-4 flex items-center gap-4">
+                        <method.icon className="h-8 w-8" />
+                        <div>
+                            <h3 className="font-medium">{method.name}</h3>
+                            <p className="text-sm text-muted-foreground">
+                                {method.description}
+                            </p>
                         </div>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                            {method.description}
-                        </p>
                     </CardContent>
                 </Card>
             ))}

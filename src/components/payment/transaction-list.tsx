@@ -1,6 +1,6 @@
 'use client'
 
-import { Payment } from "@lib/stores/payment"
+import {Payment, usePaymentStore} from "@/lib/stores/payment"
 import {
     Table,
     TableBody,
@@ -8,20 +8,12 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@components/ui/table"
-import { Badge } from "@components/ui/badge"
-import { formatDistance } from 'date-fns'
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 
 interface TransactionListProps {
     transactions: Payment[]
-    onSelectTransaction?: (transaction: Payment) => void
-}
-
-const statusColors = {
-    pending: "bg-yellow-100 text-yellow-800",
-    processing: "bg-blue-100 text-blue-800",
-    completed: "bg-green-100 text-green-800",
-    failed: "bg-red-100 text-red-800",
+    onSelectTransaction: (transaction: Payment) => void
 }
 
 export function TransactionList({ transactions, onSelectTransaction }: TransactionListProps) {
@@ -36,20 +28,14 @@ export function TransactionList({ transactions, onSelectTransaction }: Transacti
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {transactions.map((transaction) => (
-                    <TableRow
-                        key={transaction.id}
-                        className="cursor-pointer hover:bg-muted/50"
-                        onClick={() => onSelectTransaction?.(transaction)}
-                    >
+                {transactions.map((tx) => (
+                    <TableRow key={tx.id} onClick={() => onSelectTransaction(tx)}>
+                        <TableCell>{tx.createdAt}</TableCell>
+                        <TableCell>{tx.description}</TableCell>
+                        <TableCell>${tx.amount}</TableCell>
                         <TableCell>
-                            {formatDistance(new Date(transaction.createdAt), new Date(), { addSuffix: true })}
-                        </TableCell>
-                        <TableCell>{transaction.description}</TableCell>
-                        <TableCell>${transaction.amount} USDC</TableCell>
-                        <TableCell>
-                            <Badge variant="secondary" className={statusColors[transaction.status]}>
-                                {transaction.status}
+                            <Badge variant="secondary">
+                                {tx.status}
                             </Badge>
                         </TableCell>
                     </TableRow>

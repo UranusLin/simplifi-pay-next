@@ -28,9 +28,10 @@ const stats = [
 
 export function DashboardStats() {
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4">
+            {/* 改為2列而不是4列以適應移動端 */}
             {stats.map((stat) => (
-                <Card key={stat.title}>
+                <Card key={stat.title} className="p-4">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
                             {stat.title}

@@ -1,3 +1,4 @@
+'use client'
 import { DashboardStats } from "@/components/dashboard/stats"
 import { RecentTransactions } from "@/components/dashboard/recent-transactions"
 import { QuickActions } from "@/components/dashboard/quick-actions"
