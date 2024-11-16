@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
-const config = {
-    eactStrictMode: true,
-    transpilePackages: ["@simplifi-pay/common", "@simplifi-pay/sdk"],
+const nextConfig = {
+    reactStrictMode: true, // 修正拼寫錯誤 eactStrictMode -> reactStrictMode
     webpack: (config) => {
         config.resolve.fallback = {
             fs: false,
@@ -10,7 +9,7 @@ const config = {
         }
         return config
     },
-    distDir: 'build',
+    // 移除 distDir: 'build', 讓 Next.js 使用默認的 .next 目錄
 };
 
-module.exports = config;
+module.exports = nextConfig;
