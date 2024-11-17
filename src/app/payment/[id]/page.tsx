@@ -10,6 +10,7 @@ import { usePaymentStore } from "@/lib/stores/payment"
 import { PaymentStatus } from "@/components/payment/payment-status"
 import { ConfirmationDialog } from "@/components/payment/confirmation-dialog"
 import { formatDistance } from "date-fns"
+import {MiniAppPaymentPayload, MiniKit, PayCommandInput, ResponseEvent} from "@worldcoin/minikit-js";
 
 export default function PaymentConfirmPage({
                                                params,
@@ -30,22 +31,61 @@ export default function PaymentConfirmPage({
         try {
             setIsProcessing(true)
             setShowConfirmDialog(false)
-            updatePayment(params.id, { status: 'processing' })
-            await new Promise(resolve => setTimeout(resolve, 2000))
-            updatePayment(params.id, { status: 'completed' })
 
-            toast({
-                title: "Payment Successful",
-                description: "Your payment has been processed successfully.",
-            })
+            updatePayment(params.id, { status: 'processing' as const })
 
-            setTimeout(() => {
-                router.push("/payments")
-            }, 1500)
+            if (MiniKit.isInstalled()) {
+                // 首先初始化支付
+                const initResponse = await fetch('/api/initiate-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: payment.amount,
+                        description: payment.description,
+                    })
+                })
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { id: paymentReference } = await initResponse.json()
+
+                const paymentResult = await MiniKit.commandsAsync.pay({
+                    reference: paymentReference,
+                    to: payment.recipient || '',
+                    tokens: [{
+                        symbol: 'USDCE',
+                        token_amount: (parseFloat(payment.amount) * 1e6).toString() // 假設 USDC 有 6 位小數
+                    }],
+                    description: payment.description
+                } as PayCommandInput)
+
+                // 設置監聽器來接收支付結果
+                MiniKit.subscribe(ResponseEvent.MiniAppPayment, async (response: MiniAppPaymentPayload) => {
+                    if (response.status === "success") {
+                        const verifyResponse = await fetch('/api/verify-payment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(response)
+                        })
+
+                        const verificationResult = await verifyResponse.json()
+                        if (verificationResult.success) {
+                            updatePayment(params.id, { status: 'completed' as const })
+                            toast({
+                                title: "Payment Successful",
+                                description: "Payment has been processed successfully.",
+                            })
+                            router.push("/payments")
+                        }
+                    }
+                })
+
+            }
         } catch (error) {
-            updatePayment(params.id, { status: 'failed' })
+            console.error('Payment error:', error)
+            updatePayment(params.id, { status: 'failed' as const })
             toast({
                 variant: "destructive",
                 title: "Payment Failed",
