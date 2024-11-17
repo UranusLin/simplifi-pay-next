@@ -114,18 +114,18 @@ export function WalletInfo() {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    <div>
-                        <p className="text-sm text-muted-foreground">Address</p>
-                        <p className="font-mono text-sm">
-                            {isLoading ? (
-                                <Icons.spinner className="h-4 w-4 animate-spin" />
-                            ) : (
-                                address ?
-                                    `${address.slice(0, 6)}...${address.slice(-4)}` :
-                                    'Not connected'
-                            )}
-                        </p>
-                    </div>
+                    {/*<div>*/}
+                    {/*    <p className="text-sm text-muted-foreground">Address</p>*/}
+                    {/*    <p className="font-mono text-sm">*/}
+                    {/*        {isLoading ? (*/}
+                    {/*            <Icons.spinner className="h-4 w-4 animate-spin" />*/}
+                    {/*        ) : (*/}
+                    {/*            address ?*/}
+                    {/*                `${address.slice(0, 6)}...${address.slice(-4)}` :*/}
+                    {/*                'Not connected'*/}
+                    {/*        )}*/}
+                    {/*    </p>*/}
+                    {/*</div>*/}
                     <div>
                         <p className="text-sm text-muted-foreground">Balance</p>
                         <p className="font-mono text-sm">
